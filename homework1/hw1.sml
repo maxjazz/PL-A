@@ -12,3 +12,21 @@ val month_range = fn : int * int -> int list
 val oldest = fn : (int * int * int) list -> (int * int * int) option
 ****************************************************************************************)
 
+fun is_older ( date1: int*int*int, date2: int*int*int ) =
+    (#1 date1 < #1 date2  )
+    orelse (#1 date1 = #1 date2 andalso #2 date1 < #2 date2 )
+    orelse (#1 date1 = #1 date2 andalso #2 date1 = #2 date2 andalso #3 date1 < #3 date2);
+
+fun number_in_month (dl : (int*int*int) list, m : int) =
+  if null dl
+  then 0
+  else
+      let
+          val nim = number_in_month(tl dl, m)
+      in
+          if #2 (hd dl) = m
+          then 1+nim
+          else nim
+      end
+;
+  
