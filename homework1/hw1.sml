@@ -12,11 +12,13 @@ val month_range = fn : int * int -> int list
 val oldest = fn : (int * int * int) list -> (int * int * int) option
 ****************************************************************************************)
 
+(* 1 *)
 fun is_older ( date1: int*int*int, date2: int*int*int ) =
     (#1 date1 < #1 date2  )
     orelse (#1 date1 = #1 date2 andalso #2 date1 < #2 date2 )
     orelse (#1 date1 = #1 date2 andalso #2 date1 = #2 date2 andalso #3 date1 < #3 date2);
 
+(* 2 *)
 fun number_in_month (dl : (int*int*int) list, m : int) =
   if null dl
   then 0
@@ -29,12 +31,13 @@ fun number_in_month (dl : (int*int*int) list, m : int) =
           else nim
       end;
 
+(* 3 *)
 fun number_in_months (dl : (int*int*int) list, ml : int list) =
   if null ml
   then 0
   else
       number_in_month (dl, hd ml) + number_in_months (dl, tl ml);
-
+(* 4 *)
 fun dates_in_month (dl : (int*int*int) list, d : int) =
   if null dl
   then []
@@ -47,13 +50,29 @@ fun dates_in_month (dl : (int*int*int) list, d : int) =
           else dim
       end;
 
+(* 5 *)
 fun dates_in_months (dl : (int*int*int) list, ml:int list) =
   if null ml
   then []
   else
       dates_in_month (dl, hd ml)::dates_in_months (dl, tl ml);
 
+(* 6 *)
+fun get_nth (sl : string list, n : int) =
+  if n = 1
+  then hd sl
+  else get_nth (tl sl, n-1);
 
+(* 7 *)
+fun date_to_string ( date: (int*int*int)) =
+  let
+      val months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "November", "October", "December"]
+  in
+      get_nth (months, #2 date)^" "^Int.toString (#3 date) ^", "^ Int.toString (#1 date)
+  end;
+
+
+               
 
          
                    
