@@ -27,6 +27,33 @@ fun number_in_month (dl : (int*int*int) list, m : int) =
           if #2 (hd dl) = m
           then 1+nim
           else nim
-      end
-;
-  
+      end;
+
+fun number_in_months (dl : (int*int*int) list, ml : int list) =
+  if null ml
+  then 0
+  else
+      number_in_month (dl, hd ml) + number_in_months (dl, tl ml);
+
+fun dates_in_month (dl : (int*int*int) list, d : int) =
+  if null dl
+  then []
+  else
+      let
+          val dim = dates_in_month (tl dl, d)
+      in
+          if #2 (hd dl) = d
+          then (hd dl)::dim
+          else dim
+      end;
+
+fun dates_in_months (dl : (int*int*int) list, ml:int list) =
+  if null ml
+  then []
+  else
+      dates_in_month (dl, hd ml)::dates_in_months (dl, tl ml);
+
+
+
+         
+                   
