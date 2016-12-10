@@ -92,7 +92,7 @@ fun what_month (day : int) =
 
 (* 10 *)
 fun month_range (d1: int, d2: int) =
-  if d1>=d2
+  if d1>d2
   then []
   else what_month d1 :: month_range(d1+1, d2);
 
