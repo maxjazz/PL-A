@@ -66,13 +66,51 @@ fun get_nth (sl : string list, n : int) =
 (* 7 *)
 fun date_to_string ( date: (int*int*int)) =
   let
-      val months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "November", "October", "December"]
+      val months = ["January", "February", "March",
+                    "April", "May", "June",
+                    "July", "August", "September",
+                    "November", "October", "December"]
   in
-      get_nth (months, #2 date)^" "^Int.toString (#3 date) ^", "^ Int.toString (#1 date)
+      get_nth (months, #2 date) ^
+      " "  ^ Int.toString (#3 date) ^
+      ", " ^ Int.toString (#1 date)
   end;
 
+(* 8 *)
+fun number_before_reaching_sum ( sum : int, dl : int list) =
+  if hd dl >= sum
+  then 0
+  else 1 + number_before_reaching_sum (sum - hd dl, tl dl);
 
-               
+(* 9 *)
+fun what_month (day : int) =
+  let
+      val months = [31,28,31,30,31,30,31,31,30,31,30,31]
+  in
+      1+number_before_reaching_sum (day, months)
+  end;
 
-         
-                   
+(* 10 *)
+fun month_range (d1: int, d2: int) =
+  if d1>=d2
+  then []
+  else what_month d1 :: month_range(d1+1, d2);
+
+(* 11 *)
+fun oldest (dl : (int*int*int) list) =
+  if null dl
+  then NONE
+  else
+      let
+          val rest_oldest = oldest(tl dl)
+      in
+          if isSome rest_oldest andalso is_older((valOf rest_oldest), (hd dl))
+          then rest_oldest
+          else SOME (hd dl)
+      end;
+
+
+
+
+          
+
