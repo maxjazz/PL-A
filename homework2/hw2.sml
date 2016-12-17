@@ -15,18 +15,32 @@ fun all_except_option (str, str_lst) =
                     then SOME tail
                     else case all_except_option(str, tail) of
                              NONE => NONE
-                           | SOME xs => SOME (head::xs)
-                                             
+                           | SOME xs => SOME (head::xs);
 
 (* 1B. Takes a string list list (a list of list of strings, the substitutions) and a string s and returns a string list *)
-fun get_substitution1 (str_list, str) = NONE ;
+fun get_substitutions1 (str_list, str) =
+  case str_list of [] => []
+                 | x::xs => case all_except_option (str, x) of
+                                NONE => get_substitution1(xs, str)
+                              | SOME st => st @ get_substitution1(xs, str);
 
 (* 1C. uses a tail-recursive local helper function *)
-fun get_substitution2 (str_list, str) = NONE ;
+fun get_substitutions2 (str_list, str) =
+  let fun aux (list, acc) =
+        case list of [] => acc
+                   | x::xs => case all_except_option (str, x) of
+                                  NONE => aux (xs, acc)
+                                | SOME value => aux (xs, value @ acc)
+  in
+      aux(str_list, [])
+  end;
+
 
 (* 1D.  similar_names, which takes a string list list of substitutions (as in parts (b) and (c)) and a full name of type {first:string,middle:string,last:string} and returns a list of full names (type {first:string,middle:string,last:string} list). T) *)
 
 fun similar_names (list) = NONE;
+
+
 
 (*
 2. This problem involves a solitaire card game invented just for this question. You will write a program that tracks the progress of a game; writing a game player is a challenge problem. You can do parts (a)–(e) before understanding the game if you wish.
@@ -91,4 +105,4 @@ fun score (cs, goal) =
 ;
 
   (* 2G. Write a function officiate, which “runs a game.” It takes a card list (the card-list) a move list (what the player “does” at each point), and an int (the goal) and returns the score at the end of the game after processing (some or all of) the moves in the move list in order. *)
-  
+  fun officiate (cards, moves, goal) = NONE;
