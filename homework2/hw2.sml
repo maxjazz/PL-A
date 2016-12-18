@@ -21,8 +21,8 @@ fun all_except_option (str, str_lst) =
 fun get_substitutions1 (str_list, str) =
   case str_list of [] => []
                  | x::xs => case all_except_option (str, x) of
-                                NONE => get_substitution1(xs, str)
-                              | SOME st => st @ get_substitution1(xs, str);
+                                NONE => get_substitutions1(xs, str)
+                              | SOME st => st @ get_substitutions1(xs, str);
 
 (* 1C. uses a tail-recursive local helper function *)
 fun get_substitutions2 (str_list, str) =
@@ -38,8 +38,14 @@ fun get_substitutions2 (str_list, str) =
 
 (* 1D.  similar_names, which takes a string list list of substitutions (as in parts (b) and (c)) and a full name of type {first:string,middle:string,last:string} and returns a list of full names (type {first:string,middle:string,last:string} list). T) *)
 
-fun similar_names (list) = NONE;
-
+fun similar_names (list, name) =
+  let val {first = f, middle = m, last = l} = name
+      fun generate_names  (list) =
+        case list of [] => []
+                   | x::xs => {first = x, middle = m, last = l} :: generate_names(xs)
+  in
+      generate_names(get_substitutions2(list, f))
+  end;
 
 
 (*
@@ -105,4 +111,17 @@ fun score (cs, goal) =
 ;
 
   (* 2G. Write a function officiate, which “runs a game.” It takes a card list (the card-list) a move list (what the player “does” at each point), and an int (the goal) and returns the score at the end of the game after processing (some or all of) the moves in the move list in order. *)
-  fun officiate (cards, moves, goal) = NONE;
+  fun officiate (cards, moves, goal) =
+    let fun loop (current, cards_left, moves_left) =
+          case moves_left of
+              [] => score (current, goal)
+            | (Discard c)::tail => loop ( remove_card(current, c, IllegalMove) , cards_left, tail)
+            | Draw::tail => case cards_left of
+                                [] => score (current, goal)
+                              | c::rest => if sum_cards(c::current) > goal
+                                           then score (c::current, goal)
+                                           else
+                                               loop (c::current, rest, tail)
+    in
+        loop ([],cards, moves)
+    end;
